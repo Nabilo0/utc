@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button onclick="getLocalTime()">Convert</button>
+    
+    <script>
+        async function getLocalTime(utcTime, timezone) {
+  // Validate input time format (HH:MM)
+  if (!/^\d{2}:\d{2}$/.test(utcTime)) {
+    return "❌ Invalid time format. Use HH:MM.";
+  }
+
+  try {
+    // Fetch UTC offset from WorldTimeAPI
+    const response = await fetch(`https://worldtimeapi.org/api/timezone/${timezone}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch time data.");
+    }
+
+    const data = await response.json();
+    const utcOffset = data.utc_offset; // e.g., "+02:00"
+
+    // Parse the input time and offset
+    const [inputHours, inputMinutes] = utcTime.split(":").map(Number);
+    const [offsetHours, offsetMinutes] = utcOffset.split(":").map(Number);
+
+    // Calculate local time
+    let localHours = inputHours + offsetHours;
+    let localMinutes = inputMinutes + offsetMinutes;
+
+    // Handle overflow in minutes and hours
+    if (localMinutes >= 60) {
+      localMinutes -= 60;
+      localHours += 1;
+    }
+    if (localHours >= 24) {
+      localHours -= 24;
+    }
+
+    // Format the local time as HH:MM
+    return `${String(localHours).padStart(2, "0")}:${String(localMinutes).padStart(2, "0")}`;
+  } catch (error) {
+    return `❌ Error: ${error.message}`;
+  }
+}
+
+// Example usage
+const utcTime = "13:00";
+const timezone = "Africa/Tunis"; // Tunisia
+
+getLocalTime(utcTime, timezone).then((localTime) => {
+  console.log(localTime); // Output: "14:00" (if successful)
+});
+    </script>
+</body>
+</html>
