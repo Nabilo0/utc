@@ -66,8 +66,12 @@
 
         // const localtime = countryTime(flightNumber);
         let localtime = getLocalTimeText(flightNumber);
-        let testtime =  getTimeZoneAdjustment(flightNumber);
-        console.log(testtime);
+        // let testtime =  getTimeZoneAdjustment(flightNumber);
+        const { offset, localTime } =  getTimeZoneAdjustment(flightNumber);
+
+        console.log(offset);
+        console.log(localTime);
+
 
         const template = `إعتذار ،،،
 مسافرونا الكرام على متن الرحلة رقم ${flightNumber} (${route}) الموافق ${day}/${currentMonth}/2025 والتي كان موعد إقلاعها على تمام الساعة ${departureHours}:${departureMinutes} لظروف تشغيلية خارجة عن إرادتنا نعتذر منكم عن التأخير الذي حدث .
@@ -87,8 +91,19 @@
         switch (flightNumber) {
             case "NB101":
             case "NB103":
+            case "NB233":
+            case "NB234":
+            case "NB235":
+            case "NB236":
+            case "NB301":
+            case "NB303":
             case "NB400":
+            case "NB740":
                 timeZoneUrl = "https://worldtimeapi.org/api/timezone/Africa/Tripoli";  // Libya
+                break;
+            case "NB302":
+            case "NB304":
+                timeZoneUrl = "https://worldtimeapi.org/api/timezone/Europe/Istanbul";  // Libya
                 break;
             case "NB102":
             case "NB104":
