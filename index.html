@@ -75,20 +75,23 @@
    
         //  let testtime =  getTimeZoneAdjustment(flightNumber);
                 // const { offset, localTime } = await getTimeZoneAdjustment(flightNumber);
-
+                let globaleOffset
         (async () => {
             const { offset, localTime } = await getTimeZoneAdjustment(flightNumber); // Wait for the promise to resolve
             console.log("Offset:", offset); // Logs the hour part of the UTC offset (e.g., "02")
             console.log("Local Time:", localTime); // Logs the timezone (e.g., "Africa/Tripoli")
-            let globaleOffset = offset;
+             globaleOffset = offset;
 
         })();
             // let timeToghther = departureHours+":"+departureMinutes;
 
-            console.log(globaleOffset);
+            // console.log(globaleOffset);
             // console.log(localTime);
 
-
+                // Use a timeout or another mechanism to wait for the async function to complete
+                setTimeout(() => {
+                    globaleOffset; // Now this works
+                }, 1000); // A
         //   ===================================================
                 let time = departureHours; // Original time
                 // let addHour = 2; // Hours to add
