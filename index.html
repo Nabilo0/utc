@@ -71,15 +71,17 @@
 
    
         //  let testtime =  getTimeZoneAdjustment(flightNumber);
+                // const { offset, localTime } = await getTimeZoneAdjustment(flightNumber);
+
         (async () => {
             const { offset, localTime } = await getTimeZoneAdjustment(flightNumber); // Wait for the promise to resolve
             console.log("Offset:", offset); // Logs the hour part of the UTC offset (e.g., "02")
             console.log("Local Time:", localTime); // Logs the timezone (e.g., "Africa/Tripoli")
         })();
-        // const { offset, localTime } = await getTimeZoneAdjustment(flightNumber);
-
-        // console.log(testtime);
-        // console.log(testtime);
+            let timeToghther = departureHours+":"+departureMinutes;
+            console.log(timeToghther);
+        console.log(offset);
+        console.log(localTime);
 
 
         const template = `إعتذار ،،،
