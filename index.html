@@ -69,8 +69,8 @@
         let testtime =  getTimeZoneAdjustment(flightNumber);
         // const { offset, localTime } = await getTimeZoneAdjustment(flightNumber);
 
-        console.log(offsetToBeUse);
-        // console.log(localTime);
+        console.log(testtime.offset);
+        console.log(localTime);
 
 
         const template = `إعتذار ،،،
@@ -86,8 +86,7 @@
     }
 
       // Function to get time zone adjustment based on flight number
-      let offsetToBeUse; // Declare a shared variable to store the offset
-
+ 
       async function getTimeZoneAdjustment(flightNumber) {
         let timeZoneUrl = "";
         switch (flightNumber) {
@@ -124,10 +123,10 @@
 
         const utcOffset = data.utc_offset; // UTC offset from API response (e.g., "+02:00")
         // const offset = parseInt(utcOffset.substring(0, 3));  // Extract the offset (e.g., 2 from +02:00)
-        const offsetToBeUse = utcOffset.slice(1, 3); // Extract the second and third characters
+        const offset = utcOffset.slice(1, 3); // Extract the second and third characters
 
         return {
-            offsetToBeUse,
+            offset,
             localTime: data.timezone
         };
     }
