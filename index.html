@@ -66,11 +66,22 @@
 
         // const localtime = countryTime(flightNumber);
         let localtime = getLocalTimeText(flightNumber);
-        let testtime =  getTimeZoneAdjustment(flightNumber);
+
+
+
+    let ooo =  getTimeZoneAdjustment(flightNumber)
+        .then(offset => {
+            return offset; // Should log the hour as a string like "02"
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+        console.log(ooo);
+        // let testtime =  getTimeZoneAdjustment(flightNumber);
         // const { offset, localTime } = await getTimeZoneAdjustment(flightNumber);
 
-        console.log(testtime);
-        console.log(testtime);
+        // console.log(testtime);
+        // console.log(testtime);
 
 
         const template = `إعتذار ،،،
