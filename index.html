@@ -38,6 +38,9 @@
         "NB301": "بنغازي - اسطنبول",
     };
 
+
+           
+
     function generateMessage() {
         const flightData = document.getElementById('flightData').value.trim();
         const lines = flightData.split("\n");
@@ -78,10 +81,32 @@
             console.log("Offset:", offset); // Logs the hour part of the UTC offset (e.g., "02")
             console.log("Local Time:", localTime); // Logs the timezone (e.g., "Africa/Tripoli")
         })();
-            let timeToghther = departureHours+":"+departureMinutes;
-            console.log(timeToghther);
-        console.log(offset);
-        console.log(localTime);
+            // let timeToghther = departureHours+":"+departureMinutes;
+
+            console.log(offset);
+            console.log(localTime);
+
+
+        //   ===================================================
+                let time = departureHours; // Original time
+                // let addHour = 2; // Hours to add
+                let addHour = Number(offset);
+
+                // Split the time into hours and minutes
+                let [hours, minutes] = time.split(":").map(Number);
+
+                // Add the hours
+                hours += addHour;
+
+                // Adjust for overflow (if hours exceed 23)
+                if (hours >= 24) {
+                    hours -= 24;
+                }
+
+                console.log(hours); // Logs "23:15" if you add 2 hours to "21:15"
+        //   ============================
+
+
 
 
         const template = `إعتذار ،،،
