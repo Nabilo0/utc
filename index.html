@@ -80,17 +80,19 @@
             const { offset, localTime } = await getTimeZoneAdjustment(flightNumber); // Wait for the promise to resolve
             console.log("Offset:", offset); // Logs the hour part of the UTC offset (e.g., "02")
             console.log("Local Time:", localTime); // Logs the timezone (e.g., "Africa/Tripoli")
+            let globaleOffset = offset;
+
         })();
             // let timeToghther = departureHours+":"+departureMinutes;
 
-            console.log(offset);
-            console.log(localTime);
+            console.log(globaleOffset);
+            // console.log(localTime);
 
 
         //   ===================================================
                 let time = departureHours; // Original time
                 // let addHour = 2; // Hours to add
-                let addHour = Number(offset);
+                let addHour = Number(globaleOffset);
 
                 // Split the time into hours and minutes
                 let [hours, minutes] = time.split(":").map(Number);
