@@ -69,15 +69,13 @@
 
 
 
-    let ooo =  getTimeZoneAdjustment(flightNumber)
-        .then(offset => {
-            return offset; // Should log the hour as a string like "02"
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
-        console.log(ooo);
-        // let testtime =  getTimeZoneAdjustment(flightNumber);
+   
+        //  let testtime =  getTimeZoneAdjustment(flightNumber);
+        (async () => {
+            const { offset, localTime } = await getTimeZoneAdjustment(flightNumber); // Wait for the promise to resolve
+            console.log("Offset:", offset); // Logs the hour part of the UTC offset (e.g., "02")
+            console.log("Local Time:", localTime); // Logs the timezone (e.g., "Africa/Tripoli")
+        })();
         // const { offset, localTime } = await getTimeZoneAdjustment(flightNumber);
 
         // console.log(testtime);
@@ -136,11 +134,11 @@
         // const offset = parseInt(utcOffset.substring(0, 3));  // Extract the offset (e.g., 2 from +02:00)
         const offset = utcOffset.slice(1, 3); // Extract the second and third characters
 
-        return offset;
-        // return {
-        //     offset,
-        //     localTime: data.timezone
-        // };
+        // return offset;
+        return {
+            offset,
+            localTime: data.timezone
+        };
     }
 
     function getLocalTimeText(localtime) {
