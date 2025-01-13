@@ -1,4 +1,173 @@
+<!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Message Generator</title>
+    <style>
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Flight Message Generator</h1>
+<textarea id="flightData" placeholder="Enter flight data here (DL MVT\nNB400/06.5ABRB.BEN\nED 2000\nDL 93\nBEST REGARD\nBERNIQ OPS)"></textarea>
+<button onclick="generateMessage()">Generate Message</button>
+
+<h2>Generated Message:</h2>
+<pre id="messageOutput" style="direction: ltr;"></pre>
+
+<script>
+    const data = {
+        "NB101": "بنغازي - تونس",
+        "NB400": "بنغازي - الاسكندرية",
+        "NB103": "بنغازي - تونس",
+        "NB102": "تونس - بنغازي",
+        "NB104": "تونس - بنغازي",
+        "NB401": "بنغازي - الاسكندرية",
+        "NB451": "بنغازي - الاسكندرية",
+    };
+
+    // Make generateMessage async to use await inside it
+    async function generateMessage() {
+        const flightData = document.getElementById('flightData').value.trim();
+        const lines = flightData.split("\n");
+
+        if (lines.length < 3) {
+            document.getElementById('messageOutput').textContent = "Invalid input. Please provide at least 3 lines of data.";
+            return;
+        }
+
+        const flightNumberLine = lines[1];
+        const departureLine = lines[2];
+
+        const flightNumber = flightNumberLine.split('/')[0];
+        const departureTime = departureLine.split(' ')[1];
+
+        let route = data[flightNumber] || "<UNKNOWN>";
+
+        const day = flightNumberLine.split('/')[1].split('.')[0];
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1;
+
+        const departureHours = parseInt(departureTime.substring(0, 2));
+        const departureMinutes = parseInt(departureTime.substring(2, 4));
+
+        let localTimeAdjustment = await getTimeZoneAdjustment(flightNumber);
+        
+        // Adjust departure time based on the fetched time zone
+        let adjustedTime = adjustTimeForFlight(departureHours, departureMinutes, localTimeAdjustment);
+
+        const timeText = convertTimeToText(adjustedTime.hours, adjustedTime.minutes);
+
+        const template = `إعتذار ،،،\nمسافرونا الكرام على متن الرحلة رقم ${flightNumber} (${route}) الموافق ${day}/${currentMonth}/2025 والتي كان موعد إقلاعها على تمام الساعة ${departureHours}:${departureMinutes} لظروف تشغيلية خارجة عن إرادتنا نعتذر منكم عن التأخير الذي حدث .\nونعلمكم بأن موعد الإقلاع المتوقع سيكون على تمام الساعة ${adjustedTime.hours}:${adjustedTime.minutes} (${timeText}) ${localTimeAdjustment.localTime}.`;
+
+        document.getElementById('messageOutput').textContent = template;
+    }
+
+    // Function to get time zone adjustment based on flight number
+    async function getTimeZoneAdjustment(flightNumber) {
+        let timeZoneUrl = "";
+        switch (flightNumber) {
+            case "NB101":
+            case "NB103":
+            case "NB400":
+                timeZoneUrl = "http://worldtimeapi.org/api/timezone/Africa/Tripoli";  // Libya
+                break;
+            case "NB102":
+            case "NB104":
+                timeZoneUrl = "http://worldtimeapi.org/api/timezone/Africa/Tunis";  // Tunisia
+                break;
+            case "NB401":
+            case "NB451":
+                timeZoneUrl = "http://worldtimeapi.org/api/timezone/Africa/Cairo";  // Egypt
+                break;
+            default:
+                return { offset: 0, localTime: "UTC" };  // Default to UTC
+        }
+
+        const response = await fetch(timeZoneUrl);
+        const data = await response.json();
+
+        const utcOffset = data.utc_offset; // UTC offset from API response (e.g., "+02:00")
+        const offset = parseInt(utcOffset.substring(0, 3));  // Extract the offset (e.g., 2 from +02:00)
+
+        return {
+            offset,
+            localTime: data.timezone
+        };
+    }
+
+    // Adjust departure time based on the offset
+    function adjustTimeForFlight(hours, minutes, adjustment) {
+        const departureDateTime = new Date(Date.UTC(2025, 0, 1, hours, minutes)); // Use a dummy date
+        departureDateTime.setHours(departureDateTime.getHours() + adjustment.offset);
+
+        return {
+            hours: departureDateTime.getHours(),
+            minutes: departureDateTime.getMinutes()
+        };
+    }
+
+    function convertTimeToText(hours, minutes) {
+        const hoursTextWithPrefix = [
+            "الواحدة", "الثانية", "الثالثة", "الرابعة", "الخامسة", 
+            "السادسة", "السابعة", "الثامنة", "التاسعة", "العاشرة", 
+            "الحادية عشرة", "الثانية عشرة"
+        ];
+
+        let period = "صباحا";
+        if (hours >= 12) {
+            period = "مساءً";
+            if (hours > 12) {
+                hours -= 12;
+            }
+        }
+
+        const hoursText = hoursTextWithPrefix[hours - 1];
+
+        let timeText = `الساعة ${hoursText}`;
+        if (minutes > 0) {
+            const numbersToWords = [
+                "صفر", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة", 
+                "عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر", "ستة عشر", 
+                "سبعة عشر", "ثمانية عشر", "تسعة عشر", "عشرون", "واحد وعشرون", "اثنان وعشرون", 
+                "ثلاثة وعشرون", "أربعة وعشرون", "خمسة وعشرون", "ستة وعشرون", "سبعة وعشرون", 
+                "ثمانية وعشرون", "تسعة وعشرون", "ثلاثون", "واحد وثلاثون", "اثنان وثلاثون", 
+                "ثلاثة وثلاثون", "أربعة وثلاثون", "خمسة وثلاثون", "ستة وثلاثون", "سبعة وثلاثون", 
+                "ثمانية وثلاثون", "تسعة وثلاثون", "أربعون", "واحد وأربعون", "اثنان وأربعون", 
+                "ثلاثة وأربعون", "أربعة وأربعون", "خمسة وأربعون", "ستة وأربعون", "سبعة وأربعون", 
+                "ثمانية وأربعون", "تسعة وأربعون", "خمسون", "واحد وخمسون", "اثنان وخمسون", 
+                "ثلاثة وخمسون", "أربعة وخمسون", "خمسة وخمسون", "ستة وخمسون", "سبعة وخمسون", 
+                "ثمانية وخمسون", "تسعة وخمسون"
+            ];
+            const minutesText = numbersToWords[minutes];
+
+            if (minutes >= 1 && minutes <= 10) {
+                timeText += ` و${minutesText} دقائق`;
+            } else {
+                timeText += ` و${minutesText} دقيقة`;
+            }
+        }
+
+        timeText += ` ${period}`;
+        return timeText;
+    }
+</script>
+
+</body>
+</html>
+
+
+<!-- <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,4 +230,4 @@ getLocalTime(utcTime, timezone).then((localTime) => {
 });
     </script>
 </body>
-</html>
+</html> -->
