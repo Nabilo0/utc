@@ -106,11 +106,25 @@
                 departureHours = hours;
                 console.log("Updated departureHours:", departureHours);
                 // Trigger a callback
+
+
+                
+        const template = `إعتذار ،،،
+مسافرونا الكرام على متن الرحلة رقم ${flightNumber} (${route}) الموافق ${day}/${currentMonth}/2025 والتي كان موعد إقلاعها على تمام الساعة ${departureHours}:${departureMinutes} لظروف تشغيلية خارجة عن إرادتنا نعتذر منكم عن التأخير الذي حدث .
+ونعلمكم بأن موعد الإقلاع المتوقع سيكون على تمام الساعة ${departureHours}:${departureMinutes} (${timeText}) ${localtime}.
+
+الرجاء التواجد في المطار قبل موعد الإقلاع ب 3 ساعات
+مركز التواصل لشركة برنيق للطيران في خدمتكم على مدار 24 ساعة.
+0912009955
+0922009955`;
+
+        document.getElementById('messageOutput').textContent = template;
+        
         })();
             // Use a timeout to wait for async to complete (not ideal)
-            setTimeout(() => {
-                console.log("Updated departureHours outside async:", departureHours);
-            }, 1000); // Ensure the async function has enough time to complete
+            // setTimeout(() => {
+            //     console.log("Updated departureHours outside async:", departureHours);
+            // }, 1000); // Ensure the async function has enough time to complete
 
 
             // let timeToghther = departureHours+":"+departureMinutes;
@@ -129,16 +143,16 @@
 
 
 
-        const template = `إعتذار ،،،
-مسافرونا الكرام على متن الرحلة رقم ${flightNumber} (${route}) الموافق ${day}/${currentMonth}/2025 والتي كان موعد إقلاعها على تمام الساعة ${departureHours}:${departureMinutes} لظروف تشغيلية خارجة عن إرادتنا نعتذر منكم عن التأخير الذي حدث .
-ونعلمكم بأن موعد الإقلاع المتوقع سيكون على تمام الساعة ${departureHours}:${departureMinutes} (${timeText}) ${localtime}.
+//         const template = `إعتذار ،،،
+// مسافرونا الكرام على متن الرحلة رقم ${flightNumber} (${route}) الموافق ${day}/${currentMonth}/2025 والتي كان موعد إقلاعها على تمام الساعة ${departureHours}:${departureMinutes} لظروف تشغيلية خارجة عن إرادتنا نعتذر منكم عن التأخير الذي حدث .
+// ونعلمكم بأن موعد الإقلاع المتوقع سيكون على تمام الساعة ${departureHours}:${departureMinutes} (${timeText}) ${localtime}.
 
-الرجاء التواجد في المطار قبل موعد الإقلاع ب 3 ساعات
-مركز التواصل لشركة برنيق للطيران في خدمتكم على مدار 24 ساعة.
-0912009955
-0922009955`;
+// الرجاء التواجد في المطار قبل موعد الإقلاع ب 3 ساعات
+// مركز التواصل لشركة برنيق للطيران في خدمتكم على مدار 24 ساعة.
+// 0912009955
+// 0922009955`;
 
-        document.getElementById('messageOutput').textContent = template;
+//         document.getElementById('messageOutput').textContent = template;
     }
 
       // Function to get time zone adjustment based on flight number
