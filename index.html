@@ -87,19 +87,16 @@
 
             // console.log(globaleOffset);
             // console.log(localTime);
-
+        //   ============================
                 // Use a timeout or another mechanism to wait for the async function to complete
                 setTimeout(() => {
                     globaleOffset; // Now this works
                 }, 1000); // A
-        //   ===================================================
-                let time = departureHours; // Original time
+                let time = departureHours+":"+departureMinutes; // Original time
                 // let addHour = 2; // Hours to add
                 let addHour = Number(globaleOffset);
-
                 // Split the time into hours and minutes
                 let [hours, minutes] = time.split(":").map(Number);
-
                 // Add the hours
                 hours += addHour;
 
@@ -107,8 +104,7 @@
                 if (hours >= 24) {
                     hours -= 24;
                 }
-
-                console.log(hours); // Logs "23:15" if you add 2 hours to "21:15"
+               console.log(hours); // Logs "23:15" if you add 2 hours to "21:15"
         //   ============================
 
 
