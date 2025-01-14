@@ -86,6 +86,8 @@
 
 
             let time = departureHours+":"+departureMinutes; // Original time
+            console.log("Time:", time); // Logs the timezone (e.g., "Africa/Tripoli")
+
                 // let addHour = 2; // Hours to add
                 let addHour = Number(offset);
                 // Split the time into hours and minutes
@@ -101,14 +103,13 @@
 
 
             globaleOffset = hours;
-
             console.log("THE LAST GLOBAL OFFSET:", globaleOffset); // Logs the hour part of the UTC offset (e.g., "02")
-
+            departureHours = globaleOffset;
+            console.log("Updated departureHours:", departureHours);
 
 
         })();
 
-        departureHours =globaleOffset;
 
             // let timeToghther = departureHours+":"+departureMinutes;
             // console.log(globaleOffset);
