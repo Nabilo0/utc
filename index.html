@@ -22,8 +22,11 @@
 <textarea id="flightData" placeholder="Enter flight data here (DL MVT\nNB400/06.5ABRB.BEN\nED 2000\nDL 93\nBEST REGARD\nBERNIQ OPS)"></textarea>
 <button onclick="generateMessage()">Generate Message</button>
 
+<!-- <h2>Generated Message:</h2>
+<pre id="messageOutput" style="direction: ltr;"></pre> -->
 <h2>Generated Message:</h2>
-<pre id="messageOutput" style="direction: ltr;"></pre>
+<pre id="messageOutput" style="direction: ltr; text-align: left; white-space: pre-wrap;"></pre>
+
 
 <script>
     const data = {
@@ -77,7 +80,7 @@
         let departureHours = parseInt(departureTime.substring(0, 2));
         let departureMinutes = parseInt(departureTime.substring(2, 4));
 
-        const timeText = convertTimeToText(departureHours, departureMinutes);
+        // const timeText = convertTimeToText(departureHours, departureMinutes);
 
         // const localtime = countryTime(flightNumber);
         let localtime = getLocalTimeText(flightNumber);
@@ -119,16 +122,18 @@
                 console.log("Updated departureHours:", departureHours);
                 // Trigger a callback
 
+                const timeText = convertTimeToText(departureHours, departureMinutes);
+
 
                 
                 const template = `إعتذار ،،،
             مسافرونا الكرام على متن الرحلة رقم ${flightNumber} (${route}) الموافق ${day}/${currentMonth}/2025 والتي كان موعد إقلاعها على تمام الساعة (00:00)
 نعتذر منكم عن تغيير موعد الرحلة وذلك بسبب ظروف خارجة عن إرادتنا ونعلمكم بأن موعد المتوقع لإقلاع الرحلة سيكون  على تمام الساعة ${departureHours}:${departureMinutes} (${timeText}) ${localtime}.
 
-            الرجاء التواجد في المطار قبل موعد الإقلاع ب 3 ساعات
-            مركز التواصل لشركة برنيق للطيران في خدمتكم على مدار 24 ساعة.
-            0912009955
-            0922009955`;
+الرجاء التواجد في المطار قبل موعد الإقلاع ب 3 ساعات
+مركز التواصل لشركة برنيق للطيران في خدمتكم على مدار 24 ساعة.
+0912009955
+0922009955`;
 
         document.getElementById('messageOutput').textContent = template;
 
@@ -236,7 +241,7 @@
             return "بالتوقيت المحلي لدولة الامارات العربية المتحدة";
         case "NB302":
         case "NB304":
-        return "بالتوقيت المحلي لجمهورية تركيا";
+        return "بالتوقيت المحلي لدولة تركيا";
         default:
             return "بالتوقيت المحلي";
     }
