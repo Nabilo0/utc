@@ -62,8 +62,8 @@
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth() + 1;
 
-        const departureHours = parseInt(departureTime.substring(0, 2));
-        const departureMinutes = parseInt(departureTime.substring(2, 4));
+        let departureHours = parseInt(departureTime.substring(0, 2));
+        let departureMinutes = parseInt(departureTime.substring(2, 4));
 
         const timeText = convertTimeToText(departureHours, departureMinutes);
 
@@ -100,9 +100,10 @@
                 // ==========================
 
 
-             globaleOffset = hours;
-             console.log("THE LAST GLOBAL OFFSET:", globaleOffset); // Logs the hour part of the UTC offset (e.g., "02")
+            globaleOffset = hours;
 
+            console.log("THE LAST GLOBAL OFFSET:", globaleOffset); // Logs the hour part of the UTC offset (e.g., "02")
+            departureHours =hours;
 
 
 
